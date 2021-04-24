@@ -51,9 +51,11 @@ class PORCUPINE {
       console.error("[PORCUPINE] The NodeJS binding does not support this platform. Supported platforms include macOS (x86_64), Windows (x86_64), Linux (x86_64), and Raspberry Pi (1-4)");
       return console.error(error)
     }
-    let recorderType = PLATFORM_RECORDER_MAP.get(platform)
-    console.log(`[PORCUPINE] Platform: '${platform}'; attempting to use '${recorderType}' to access microphone ...`)
-    this.micConfig.recorder= recorderType
+    if (this.micConfig.recorder == "auto") {
+      let recorderType = PLATFORM_RECORDER_MAP.get(platform)
+      console.log(`[PORCUPINE] Platform: '${platform}'; attempting to use '${recorderType}' to access microphone ...`)
+      this.micConfig.recorder= recorderType
+    }
     this.recorderOptions = Object.assign({}, this.defaultMicOption, this.micConfig)
     log("recorderOptions", this.recorderOptions)
 
