@@ -114,7 +114,7 @@ class PORCUPINE {
   }
 
   async start () {
-    if (!this.porcupine) await this.initPorcupine()
+    if (!this.porcupine) await this.init()
     this.startListening()
     this.running = true
   }
