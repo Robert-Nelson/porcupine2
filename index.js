@@ -108,7 +108,7 @@ class PORCUPINE {
         .split("_")[0]
       this.keywordNames.push(keywordName)
     }
-
+    if (!keywordPaths.length) return console.error("[PORCUPINE] No keyword found!")
     this.porcupine = new Porcupine(keywordPaths, sensitivities, modelFilePath, libraryFilePath)
     log(`Ready for listening this wake word(s): ${this.keywordNames}`)
   }
