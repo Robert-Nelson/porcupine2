@@ -1,6 +1,6 @@
 /** Porcupine library v1.0.0 **/
 /** @bugsounet  **/
-/** 2021-04-24  **/
+/** 2021-06-12  **/
 
 const path = require("path")
 const Porcupine = require("@picovoice/porcupine-node")
