@@ -1,6 +1,6 @@
 {
   "name": "@bugsounet/porcupine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "porcupine is a customizable hotword detection engine",
   "main": "index.js",
   "keywords": [
