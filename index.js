@@ -29,7 +29,7 @@ class PORCUPINE {
     this.callback = callback
     this.debug = debug
     if (!this.debug) log = function() { /* do nothing */ }
-    log("DetectorConfig:", this.config)
+    if (this.config.dev) log("DetectorConfig:", this.config)
 
     this.defaultMicOption = {
       recorder: "arecord",
@@ -57,7 +57,7 @@ class PORCUPINE {
       this.micConfig.recorder= recorderType
     }
     this.recorderOptions = Object.assign({}, this.defaultMicOption, this.micConfig)
-    log("recorderOptions", this.recorderOptions)
+    if (this.config.dev) log("recorderOptions", this.recorderOptions)
 
     this.keywordNames= []
     this.running = false
