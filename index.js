@@ -3,9 +3,11 @@
 /** 2021-06-12  **/
 
 const path = require("path")
-const Porcupine = require("@picovoice/porcupine-node")
-const { getPlatform } = require("@picovoice/porcupine-node/platforms")
-const { BUILTIN_KEYWORDS_STRINGS, BUILTIN_KEYWORDS_STRING_TO_ENUM, getBuiltinKeywordPath } = require("@picovoice/porcupine-node/builtin_keywords")
+const { Porcupine } = require("@picovoice/porcupine-node")
+const { getPlatform } = require("@picovoice/porcupine-node/dist/platforms")
+const { BuiltinKeyword, getBuiltinKeywordPath } = require("@picovoice/porcupine-node/dist/builtin_keywords")
+
+const keywordStringMap = new Map(Array.from(new Map(Object.entries(BuiltinKeyword)), a => a.reverse()))
 
 const PassThrough = require('stream').PassThrough
 
@@ -71,15 +73,14 @@ class PORCUPINE {
     let sensitivities = []
     
     /* build keyword list */
-    this.config.forEach(detector => {
+    this.config.detectors.forEach(detector => {
       if (detector.Model) {
         let keywordString = detector.Model.trim().toLowerCase()
-        if (BUILTIN_KEYWORDS_STRINGS.has(keywordString)) {
-          keywordPaths.push(
-            getBuiltinKeywordPath(
-              BUILTIN_KEYWORDS_STRING_TO_ENUM.get(keywordString)
-            )
-          )
+
+        if (keywordString == "custom") {
+          keywordPaths.push(this.config.customModel)
+        } else if (keywordStringMap.has(keywordString)) {
+          keywordPaths.push(getBuiltinKeywordPath(keywordString))
         } else {
           return console.error(`[PORCUPINE] Keyword argument ${detector.Model} is not in the list of built-in keywords`)
         }
@@ -99,7 +100,7 @@ class PORCUPINE {
     }
     
     for (let keywordPath of keywordPaths) {
-      if (keywordPathsDefined && BUILTIN_KEYWORDS_STRINGS.has(keywordPath)) {
+      if (keywordPathsDefined && keywordStringMap.has(keywordPath)) {
         console.warn(`[PORCUPINE] --keyword_path argument '${keywordPath}' matches a built-in keyword. Did you mean to use --keywords ?`)
       }
       let keywordName = keywordPath
@@ -109,7 +110,7 @@ class PORCUPINE {
       this.keywordNames.push(keywordName)
     }
     if (!keywordPaths.length) return console.error("[PORCUPINE] No keyword found!")
-    this.porcupine = new Porcupine(keywordPaths, sensitivities, modelFilePath, libraryFilePath)
+    this.porcupine = new Porcupine(this.config.accessKey, keywordPaths, sensitivities, modelFilePath, libraryFilePath)
     log(`Ready for listening this wake word(s): ${this.keywordNames}`)
   }
 
