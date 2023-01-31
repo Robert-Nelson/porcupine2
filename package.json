@@ -24,6 +24,6 @@
   },
   "dependencies": {
     "@bugsounet/node-lpcm16": "^1.0.2",
-    "@picovoice/porcupine-node": "^1.9.1"
+    "@picovoice/porcupine-node": "^2.1.0"
   }
 }
